@@ -4,7 +4,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace SansIsAlive
+namespace SansIsAlive.Bot
 {
     public enum CommandCondition
     {
@@ -56,12 +56,6 @@ namespace SansIsAlive
 
             var context = new SocketCommandContext(_client, message);
 
-            if (commandType == CommandCondition.BasicCommand)
-            {
-                await _commands.ExecuteAsync(context, pos, null);
-                return;
-            }
-
             if (commandType == CommandCondition.Wa)
             {
                 await context.Channel.SendMessageAsync(SansString);
@@ -70,17 +64,20 @@ namespace SansIsAlive
             {
                 await context.Channel.SendMessageAsync(WaString);
             }
+            else
+            {
+                await _commands.ExecuteAsync(context, pos, null);
+            }
         }
 
         private static bool CheckMessageIsCommand(SocketUserMessage msg)
         {
-            var pos = new int();
-            return !(msg.HasMentionPrefix(_client.CurrentUser, ref pos) || msg.Author.IsBot);
+            return msg.Author.IsBot;
         }
 
         private static Task OnClientLogReceived(LogMessage msg)
         {
-            Console.WriteLine($"[{DateTime.Now}] {msg.ToString()}"); 
+            Console.WriteLine($"[{DateTime.Now}] {msg}\n"); 
             return Task.CompletedTask;
         }
 

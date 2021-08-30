@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
+using SansIsAlive.Bot;
 
 namespace SansIsAlive
 {
