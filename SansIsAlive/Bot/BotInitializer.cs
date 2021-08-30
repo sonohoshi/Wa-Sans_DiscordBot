@@ -18,7 +18,9 @@ namespace SansIsAlive
     {
         private static DiscordSocketClient _client;
         private static CommandService _commands;
-        
+
+        private const string WaString = "와!", SansString = "샌즈!";
+
         public static async Task BotMain(string token)
         {
             _client ??= new DiscordSocketClient(new DiscordSocketConfig
@@ -54,9 +56,20 @@ namespace SansIsAlive
 
             var context = new SocketCommandContext(_client, message);
 
-            await _commands.ExecuteAsync(context, pos, null);
+            if (commandType == CommandCondition.BasicCommand)
+            {
+                await _commands.ExecuteAsync(context, pos, null);
+                return;
+            }
 
-            await context.Channel.SendMessageAsync($"Received command : {message.Content}"); 
+            if (commandType == CommandCondition.Wa)
+            {
+                await context.Channel.SendMessageAsync(SansString);
+            }
+            else if (commandType == CommandCondition.Sans)
+            {
+                await context.Channel.SendMessageAsync(WaString);
+            }
         }
 
         private static bool CheckMessageIsCommand(SocketUserMessage msg)
