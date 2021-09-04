@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -38,8 +39,12 @@ namespace SansIsAlive.Bot
             await _client.LoginAsync(TokenType.Bot, token); 
             await _client.StartAsync();                 
 
-            _client.MessageReceived += OnClientMessage;    
+            _client.MessageReceived += OnClientMessage;
 
+            //await _commands.AddModuleAsync<BasicCommandModule>(null);
+            
+            Console.WriteLine($"\n\n{_commands.Modules.Count()}\n\n");
+            
             await Task.Delay(-1);
         }
 
@@ -51,7 +56,7 @@ namespace SansIsAlive.Bot
 
             var commandType = CheckMessageCondition(message);
 
-            if (CheckMessageIsCommand(message) || commandType == CommandCondition.None)
+            if (CheckMessageIsCommand(message)/* || commandType == CommandCondition.None*/)
                 return;
 
             var context = new SocketCommandContext(_client, message);
@@ -77,7 +82,7 @@ namespace SansIsAlive.Bot
 
         private static Task OnClientLogReceived(LogMessage msg)
         {
-            Console.WriteLine($"[{DateTime.Now}] {msg}\n"); 
+            Console.WriteLine($"[{DateTime.Now}] {msg}"); 
             return Task.CompletedTask;
         }
 
